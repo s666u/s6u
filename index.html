@@ -5,19 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فحص سرعة الإنترنت</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-        button { padding: 10px 20px; background: green; color: white; border: none; cursor: pointer; }
-        #result { margin-top: 20px; font-size: 20px; }
+        /* إعدادات الخطوط */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc); /* تأثير ألوان متدرجة */
+            color: white;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        h2 {
+            margin-top: 50px;
+            font-size: 36px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* تصميم الزر */
+        button {
+            padding: 20px 40px;
+            font-size: 18px;
+            margin-top: 30px;
+            background-color: #ff9800;
+            border: none;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff5722;
+            transform: scale(1.1);
+        }
+
+        /* تصميم النص */
+        #result {
+            margin-top: 40px;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            white-space: pre-line;
+        }
+
+        /* تأثير loading */
+        .loading {
+            font-size: 24px;
+            color: #ff9800;
+            font-weight: bold;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
+
     <h2>🔍 فحص سرعة الإنترنت</h2>
     <button onclick="checkSpeed()">ابدأ الفحص</button>
     <div id="result"></div>
 
     <script>
         function checkSpeed() {
-            document.getElementById("result").innerText = "جارٍ الفحص...";
+            document.getElementById("result").innerHTML = "<span class='loading'>جارٍ الفحص...</span>";
             
             // استخدام API الخاصة بـ fast.com لفحص السرعة
             fetch('https://api.fast.com/netflix/speedtest?https=true')
@@ -31,5 +90,6 @@
                 });
         }
     </script>
+
 </body>
 </html>
