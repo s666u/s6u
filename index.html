@@ -1,56 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>s6u & snake</title>
+    <title>فحص سرعة الإنترنت</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-        }
-        h1 {
-            color: #fff;
-            font-size: 2em;
-        }
-        .gallery {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-        .gallery img {
-            width: 200px;
-            margin: 10px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
-        }
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        button { padding: 10px 20px; background: green; color: white; border: none; cursor: pointer; }
+        #result { margin-top: 20px; font-size: 20px; }
     </style>
 </head>
 <body>
+    <h2>🔍 فحص سرعة الإنترنت</h2>
+    <button onclick="checkSpeed()">ابدأ الفحص</button>
+    <div id="result"></div>
 
-<div class="container">
-    <h1>s6u & snake</h1>
-    <div class="gallery">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOqhrNbk2U2ma00x0ZZKeGvkww8mU_X7avVCJ-_eSX1FRTg0WO" alt="Duck 1">
-        <img src="https://cdn.georgeinstitute.org/sites/default/files/2021-07/snakes-the-ecosystem-banner.jpg" alt="Snake 1">
-        <img src="https://kidszoo.org/wp-content/uploads/2017/06/IMG_2034-2-scaled.jpg" alt="Duck 2">
-        <img src="https://animals.sandiegozoo.org/sites/default/files/2016-10/animals_hero_snakes.jpg" alt="Snake 2">
-        <img src="https://www.kalmbachfeeds.com/cdn/shop/articles/two-white-ducks-in-grass.jpg?v=1706873608" alt="Duck 3">
-        <img src="https://res.cloudinary.com/roundglass/image/upload/ar_4:3,c_fill,f_auto,g_face,q_auto/c_limit,w_900/v1614838610/roundglass/indian-rat-snake-yellow-morph-close-up-rajesh-sanap_dxhlqj.jpg" alt="Snake 3">
-        <img src="https://media.4-paws.org/b/8/d/5/b8d5441fec6b84e9c3cba899549b84bb0f193fff/VIER%20PFOTEN_2019-07-18_013-2890x2000.jpg" alt="Duck 4">
-        <img src="https://nationalzoo.si.edu/sites/default/files/animals/easternindigosnake-001.jpg" alt="Snake 5">
-        <img src="https://www.scratchandpeck.com/app/uploads/2022/09/duckdumping-cover.jpg" alt="Duck 5">
-    </div>
-</div>
-
+    <script>
+        function checkSpeed() {
+            document.getElementById("result").innerText = "جارٍ الفحص...";
+            fetch('https://api.fast.com/netflix/speedtest?https=true')
+                .then(response => response.json())
+                .then(data => {
+                    const speed = data.download;
+                    document.getElementById("result").innerText = `سرعة التحميل: ${speed} ميجابت/ثانية`;
+                })
+                .catch(error => {
+                    document.getElementById("result").innerText = "تعذر الحصول على السرعة.";
+                });
+        }
+    </script>
 </body>
 </html>
