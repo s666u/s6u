@@ -18,6 +18,8 @@
     <script>
         function checkSpeed() {
             document.getElementById("result").innerText = "جارٍ الفحص...";
+            
+            // استخدام API الخاصة بـ fast.com لفحص السرعة
             fetch('https://api.fast.com/netflix/speedtest?https=true')
                 .then(response => response.json())
                 .then(data => {
