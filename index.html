@@ -1,1 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pentesting Tools by s6u</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { width: 50%; margin: auto; }
+        input, button { margin: 10px; padding: 10px; }
+        pre { background: #eee; padding: 10px; text-align: left; }
+    </style>
+</head>
+<body>
+    <h1>Pentesting Tools</h1>
+    <div class="container">
+        <h2>Port Scanner</h2>
+        <input type="text" id="portScannerIp" placeholder="Enter IP Address">
+        <button onclick="scanPorts()">Scan</button>
+        <pre id="portScanResult"></pre>
 
+        <h2>Whois Lookup</h2>
+        <input type="text" id="whoisDomain" placeholder="Enter Domain">
+        <button onclick="whoisLookup()">Lookup</button>
+        <pre id="whoisResult"></pre>
+
+        <h2>DNS Lookup</h2>
+        <input type="text" id="dnsDomain" placeholder="Enter Domain">
+        <button onclick="dnsLookup()">Lookup</button>
+        <pre id="dnsResult"></pre>
+
+        <h2>Ping</h2>
+        <input type="text" id="pingUrl" placeholder="Enter URL">
+        <button onclick="pingTest()">Ping</button>
+        <pre id="pingResult"></pre>
+
+        <h2>Traceroute</h2>
+        <input type="text" id="traceUrl" placeholder="Enter URL">
+        <button onclick="tracerouteTest()">Traceroute</button>
+        <pre id="traceResult"></pre>
+    </div>
+
+    <script>
+        function scanPorts() {
+            let ip = document.getElementById("portScannerIp").value;
+            let ports = [21, 22, 23, 25, 53, 80, 443, 3306, 8080];
+            let result = "Scanning: " + ip + "\n";
+            ports.forEach(port => {
+                let socket = new WebSocket(`ws://${ip}:${port}`);
+                socket.onopen = () => {
+                    result += `Port ${port} is open\n`;
+                    socket.close();
+                    document.getElementById("portScanResult").innerText = result;
+                };
+                socket.onerror = () => {
+                    result += `Port ${port} is closed\n`;
+                    document.getElementById("portScanResult").innerText = result;
+                };
+            });
+        }
+
+        function whoisLookup() {
+            let domain = document.getElementById("whoisDomain").value;
+            let url = `https://api.viewdns.info/whois/?domain=${domain}&output=json`;
+
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("whoisResult").innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(() => {
+                document.getElementById("whoisResult").innerText = "Failed to retrieve WHOIS data.";
+            });
+        }
+
+        function dnsLookup() {
+            let domain = document.getElementById("dnsDomain").value;
+            fetch(`https://dns.google/resolve?name=${domain}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("dnsResult").innerText = JSON.stringify(data, null, 2);
+            });
+        }
+
+        function pingTest() {
+            let url = document.getElementById("pingUrl").value;
+            let start = Date.now();
+            fetch(url, { mode: 'no-cors' })
+            .then(() => {
+                let time = Date.now() - start;
+                document.getElementById("pingResult").innerText = `Response time: ${time} ms`;
+            })
+            .catch(() => {
+                document.getElementById("pingResult").innerText = "Request failed.";
+            });
+        }
+
+        function tracerouteTest() {
+            let url = document.getElementById("traceUrl").value;
+            let hops = [];
+            function nextHop(hop) {
+                fetch(url, { mode: 'no-cors', cache: 'reload' })
+                .then(() => {
+                    hops.push(`Hop ${hop}: Success`);
+                    document.getElementById("traceResult").innerText = hops.join('\n');
+                })
+                .catch(() => {
+                    hops.push(`Hop ${hop}: Timeout`);
+                    document.getElementById("traceResult").innerText = hops.join('\n');
+                });
+                if (hop < 10) setTimeout(() => nextHop(hop + 1), 500);
+            }
+            nextHop(1);
+        }
+    </script>
+</body>
+</html>
